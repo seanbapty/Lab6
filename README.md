@@ -21,6 +21,23 @@ Additionally, in order to reduce the complexity of the wiring and therefore sign
 
 ![alt tag](https://raw.githubusercontent.com/seanbapty/Lab6/master/MSP430%20in%20circuit.jpg)
 #Well-Formated Code
+The first task in software development was pseudo-code. 
+```
+declare constants such as which pin does what
+initialize MSP430 pins based on hardware schematic
+ main 
+     call each movement fucntion
+implementation
+  initilization function
+  forward--activates right and left motor forward by creating appropirate potential difference
+  backward--opposite as forward
+  turn right--right wheel forward, left backward
+  turn left--opposite of right
+  small right--turn right for less time (smaller __delay_cycles(XXXXX)
+  small left--opposite
+```
+
+Based on this pseudo-code, the 3 basic functionality files were written.
 #Debugging
 #Testing methodology / results
 #Observations and Conclusions
