@@ -6,6 +6,7 @@
  */
 
 #include "lab6.h"
+#include "start5.h"
 
 void initPWM(){
 
@@ -54,18 +55,22 @@ void go(){
 
 void modForward(){
 	TA1CCR1=10;		//different from TA1CCR2 to make up for imbalances in the wheel
-	TA1CCTL1 |= OUTMOD_3;	//ratio of values obtained by guess and check
+	TA1CCTL1 |= OUTMOD_7;	//ratio of values obtained by guess and check
 
 	TA1CCR2=90;
-	TA1CCTL2 |= OUTMOD_7;
+	TA1CCTL2 |= OUTMOD_3;
 }
 
 void modBackward(){
-	TA1CCR1=80;		//different from TA1CCR2 to make up for imbalances in the wheel
+	TA1CCR1=50;		//different from TA1CCR2 to make up for imbalances in the wheel
 	TA1CCTL1 |= OUTMOD_7;	//ratio of values obtained by guess and check
 
-	TA1CCR2=20;
-	TA1CCTL2 |= OUTMOD_3;
+	TA1CCR2=50;
+	TA1CCTL2 |= OUTMOD_7;
+}
+
+void modLeft(){
+
 }
 
 void moveForward(){
@@ -111,9 +116,7 @@ void smallLeft(){
 	go();
 	L_FORWARD;
 	R_BACKWARD;
-	//P2DIR |= MOTOR_EN;
 	__delay_cycles(SHORT_DELAY);
-	//P2DIR &= ~MOTOR_EN;
 }
 
 void smallRight(){

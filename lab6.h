@@ -32,11 +32,11 @@
 #define STANDARD_DELAY		900000					// guess and check delay set
 #define SHORT_DELAY			STANDARD_DELAY/2		// used for small turns and whenever else a small delay is desired
 
-#define LEFT_OM_HI					TA1CCTL1 = OUTMOD_3;
-#define LEFT_OM_LO					TA1CCTL1 = OUTMOD_7;
+#define LEFT_OUTMOD_HL					TA1CCTL1 = OUTMOD_3;
+#define LEFT_OUTMOD_LH					TA1CCTL1 = OUTMOD_7;
 // right motor outmode
-#define RIGHT_OM_HI					TA1CCTL2 = OUTMOD_3;
-#define RIGHT_OM_LO					TA1CCTL2 = OUTMOD_7;
+#define RIGHT_OUTMOD_HL					TA1CCTL2 = OUTMOD_3;
+#define RIGHT_OUTMOD_LH					TA1CCTL2 = OUTMOD_7;
 
 void initPWM();										// initialize functions
 void go();
