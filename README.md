@@ -38,6 +38,9 @@ implementation
   small right--turn right for less time (smaller __delay_cycles(XXXXX)
   small left--opposite
 ```
+
+Based on this pseudo-code, the 3 basic functionality files were written.
+
 ##Header
 The purpose of the header was to declare the pins as meaningful constants, and all the appropriate functions.
 ```
@@ -248,8 +251,156 @@ void main(void) {
 		TACTL &= ~TAIFG;
 	}
 ```
-Based on this pseudo-code, the 3 basic functionality files were written.
+##Implementation
+The trickyest part of the implementation file was making sure to initialize all pins properly and figure out the approriate delay and duty cycle for each function.
+```
+/*
+ * moveRobot.c
+ *
+ *  Created on: Nov 23, 2014
+ *      Author: C16Sean.Bapty
+ */
+
+#include "lab6.h"
+#include "start5.h"
+
+void initPWM(){
+
+	P2DIR |= L_PWM;
+	P2SEL |= L_PWM;
+	P2DIR |= R_PWM;
+	P2SEL |= R_PWM;
+
+	L_SET_OUT;
+	L_FORWARD;
+
+	R_SET_OUT;
+	R_FORWARD;
+
+	R_SET_OUT;
+	R_DIS;
+	L_SET_OUT;
+	R_DIS;
+	//configure timers
+	TA1CTL |= TACLR; //clear timer
+	TA1CTL = ID_3 | TASSEL_2 | MC_1;// Use 1:8 presclar off MCLK
+	TA1CCR0= 100;
+
+	TA1CCR1=80;		//different from TA1CCR2 to make up for imbalances in the wheel
+	TA1CCTL1 |= OUTMOD_3;	//ratio of values obtained by guess and check
+
+	TA1CCR2=20;
+	TA1CCTL2 |= OUTMOD_7;
+
+
+	L_DIRECTION_SET;
+	R_DIRECTION_SET;
+}
+
+void stop(){
+	R_DIS;
+	L_DIS;
+	__delay_cycles(STANDARD_DELAY);
+
+}
+
+void go(){
+	R_EN;
+	L_EN;
+}
+
+void modForward(){
+	TA1CCR1=10;		//different from TA1CCR2 to make up for imbalances in the wheel
+	TA1CCTL1 |= OUTMOD_7;	//ratio of values obtained by guess and check
+
+	TA1CCR2=90;
+	TA1CCTL2 |= OUTMOD_3;
+}
+
+void modBackward(){
+	TA1CCR1=50;		//different from TA1CCR2 to make up for imbalances in the wheel
+	TA1CCTL1 |= OUTMOD_7;	//ratio of values obtained by guess and check
+
+	TA1CCR2=50;
+	TA1CCTL2 |= OUTMOD_7;
+}
+
+void modLeft(){
+
+}
+
+void moveForward(){
+	modForward();
+	go();
+	L_FORWARD;
+	R_FORWARD;
+	__delay_cycles(SHORT_DELAY);
+	//P2OUT &= ~MOTOR_EN;
+}
+
+void moveBackward(){
+	modBackward();
+	go();
+	L_BACKWARD;
+	R_BACKWARD;
+	__delay_cycles(STANDARD_DELAY);
+	//P2DIR &= ~MOTOR_EN;
+}
+
+void hardRight(){
+	modForward();
+	go();
+	L_BACKWARD;
+	R_FORWARD;
+	//P2DIR |= MOTOR_EN;
+	__delay_cycles(SHORT_DELAY);
+	//P2DIR &= ~MOTOR_EN;
+}
+
+void hardLeft(){
+	modForward();
+	go();
+	L_FORWARD;
+	R_BACKWARD;
+	//P2DIR |= MOTOR_EN;
+	__delay_cycles(STANDARD_DELAY);
+	//P2DIR &= ~MOTOR_EN;
+}
+
+void smallLeft(){
+	modForward();
+	go();
+	L_FORWARD;
+	R_BACKWARD;
+	__delay_cycles(SHORT_DELAY);
+}
+
+void smallRight(){
+	modForward();
+	go();
+	L_BACKWARD;
+	R_FORWARD;
+	//P2DIR |= MOTOR_EN;
+	__delay_cycles(SHORT_DELAY/2);//same as large turn for less time
+	//P2DIR &= ~MOTOR_EN;
+}
+```
+Notice that the OUTMOD_X effects whether the PWM is low enable or high enable. The timer values are not the same for each motor because of an apparent hardware difference between the electric motors.
 #Debugging
+The biggest problem with the functionality of the robot was that the left motor was not moving. At first I thought this was a hardware issue and drew the schematic below to confirm that my hardware was slightly off.
+![alt tag](https://github.com/seanbapty/Lab6/blob/master/IMG_0312.JPG)
+
+After making the necessary adjustments, I checked its functionality by running C2C Park's code (we had the same hardware connections). Once this was confirmed, with the help of C2C Park it was noticed that one of the left motor pins was not enabled in the initilaization file. A constant was declared for it, but was never said in the init function and therefore, the pin was not set to output anything. After making these corrections, the robot functioned as intended.
+
+Additionally, in order to make up for hardware discrepancy, the duty-cycle was changed so that the robot would go straight. This was corrected with a guess and check method of changing code, the loading it and observing the differences.
 #Testing methodology / results
+The code was tested multiple times to make sure it was not succeptible to noise and that the PWM was appropriate to make the robot go straight forward and backward. After adjusting the duty-cycle and the OUTMOD, the desired movement was achieved.
 #Observations and Conclusions
+One observation I made is that sometimes software must make up for poor hardware. My left motor is incapable of drawing as much power as the right for some unknown reason, but straight movement can still be achieved with software modifications. 
+
+In conclusion, the robot achieved the required and A functionality.
 #Documentation
+I began the project by asking C2C Ruprect for an idea for the prelab, he explained how the pins could be connected to drive the motors.
+I then referenced C1C Mossings code with his permission to get an idea of the structure of the a successful design.
+C2C El-Saawy then helped me declare constants that would make writing the software easier.
+I then referenced C2C Park's code to use specific constants in an approprite manner. He also pointed out that I didn't initialize the necessary pins.
