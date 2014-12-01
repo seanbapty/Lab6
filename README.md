@@ -13,6 +13,13 @@ The top two drawings show how the motor will be hooked up to the SN754410 and th
 #Software Flowchart/Algorithms
 There were no software flowcharts designed for this lab, however, it was determined that a header would declare constants to more "usable" names, an implementation file would contain the robot movement functions, and a main file would manage the order of movement.
 #Hardware Schematic
+Based on the prelab schematic and the motor SN754410 data sheet connection table, it was fairly easy to connect the SN754410.
+
+![alt tag](https://raw.githubusercontent.com/seanbapty/Lab6/master/motordriver%20layout.JPG)
+
+Additionally, in order to reduce the complexity of the wiring and therefore signal noise/distortion, the MSP430 was wired in-circuit. This was accomplised by referencing the datasheet on the course website.
+
+![alt tag](https://raw.githubusercontent.com/seanbapty/Lab6/master/MSP430%20in%20circuit.jpg)
 #Well-Formated Code
 #Debugging
 #Testing methodology / results
