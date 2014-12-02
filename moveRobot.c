@@ -3,6 +3,7 @@
  *
  *  Created on: Nov 23, 2014
  *      Author: C16Sean.Bapty
+ * movement functions for each required direction and initialization to enable the robot movement
  */
 
 #include "lab6.h"
