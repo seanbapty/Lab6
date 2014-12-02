@@ -1,3 +1,5 @@
+// A functionality
+// updates robots movement based on inputs from the remote control by calling functions in the implementation file
 #include <msp430.h>
 #include "lab6.h"
 #include "start5.h"
