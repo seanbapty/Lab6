@@ -3,6 +3,7 @@
  *
  *  Created on: Nov 23, 2014
  *      Author: C16Sean.Bapty
+ * includes constants for robot pins and function initialization
  */
 #include <msp430.h>
 #ifndef LAB6_H_
